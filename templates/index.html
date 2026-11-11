@@ -1,0 +1,860 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevTeam AI | Intelligent Development Team</title>
+<meta name="description" content="An AI-powered software development team that plans, codes, tests and reviews Python projects.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+:root {
+  --bg:#050812;
+  --panel:#0d1529;
+  --panel2:#101c34;
+  --border:rgba(0,255,224,.17);
+  --text:#e2e8f0;
+  --muted:#8b9bb4;
+  --cyan:#00ffe0;
+  --blue:#3b82f6;
+  --violet:#a855f7;
+  --green:#4ade80;
+  --red:#fb7185;
+  --mono:'Fira Code',monospace;
+  --sans:'DM Sans',sans-serif;
+  --glow:0 0 25px rgba(0,255,224,.13);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+button,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.container{width:min(1450px,94%);margin:auto}
+
+#neural{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:-2;pointer-events:none;opacity:.45;
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background-image:
+  linear-gradient(rgba(0,255,224,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,255,224,.035) 1px,transparent 1px);
+  background-size:45px 45px;
+  mask-image:radial-gradient(ellipse at center,#000 20%,transparent 85%);
+}
+
+/* NAVBAR */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,8,18,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  min-height:75px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px;
+}
+.logo{
+  font-family:var(--mono);font-size:1.35rem;
+  font-weight:700;color:var(--cyan);
+}
+.logo span{color:var(--muted)}
+.nav-links{display:flex;align-items:center;gap:30px;list-style:none}
+.nav-links a{color:var(--muted);font-size:.9rem;transition:.2s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.status-pill{
+  display:flex;align-items:center;gap:8px;
+  border:1px solid var(--border);border-radius:30px;
+  padding:8px 13px;font-size:.76rem;color:var(--muted);
+  font-family:var(--mono);
+}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green)}
+.menu-btn{display:none;background:none;border:1px solid var(--border);color:var(--cyan);padding:9px;border-radius:8px}
+
+/* BUTTONS */
+.btn{
+  border:1px solid transparent;border-radius:9px;
+  padding:11px 19px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:9px;transition:.25s;
+}
+.btn-primary{
+  background:linear-gradient(120deg,var(--cyan),var(--blue));
+  color:#03111a;box-shadow:var(--glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(0,255,224,.3)}
+.btn-outline{border-color:var(--border);color:var(--cyan);background:transparent}
+.btn-outline:hover{background:rgba(0,255,224,.07)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* HERO */
+.hero{padding:65px 0 38px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  border:1px solid var(--border);background:rgba(0,255,224,.045);
+  color:var(--cyan);padding:7px 13px;border-radius:30px;
+  font: .78rem var(--mono);margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(2.2rem,5vw,4rem);
+  line-height:1.13;letter-spacing:-2px;
+  max-width:850px;margin-bottom:17px;
+}
+.gradient{
+  background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));
+  color:transparent;background-clip:text;
+}
+.hero p{color:var(--muted);max-width:690px;line-height:1.8}
+.hero-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.tech-tag{
+  font: .75rem var(--mono);padding:7px 11px;
+  border:1px solid var(--border);border-radius:6px;color:#9bb3d5;
+  background:rgba(255,255,255,.025);
+}
+
+/* MAIN GRID */
+.dashboard{
+  display:grid;grid-template-columns:340px minmax(0,1fr);
+  gap:23px;padding:20px 0 70px;align-items:start;
+}
+.panel{
+  background:rgba(13,21,41,.88);
+  border:1px solid var(--border);border-radius:14px;
+  box-shadow:0 15px 45px rgba(0,0,0,.22);
+}
+.panel-head{
+  padding:19px 21px;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.panel-head h2{font-size:1rem;font-weight:700}
+.panel-head small{font: .72rem var(--mono);color:var(--muted)}
+.panel-body{padding:21px}
+.label{
+  display:block;font: .78rem var(--mono);
+  color:var(--cyan);margin-bottom:11px;
+}
+textarea{
+  width:100%;min-height:220px;resize:vertical;
+  background:#070d1b;color:var(--text);
+  border:1px solid rgba(0,255,224,.18);
+  border-radius:9px;padding:15px;
+  line-height:1.7;font-size:.9rem;outline:none;
+  transition:.2s;
+}
+textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,255,224,.07)}
+textarea::placeholder{color:#53627a}
+.input-hint{font-size:.75rem;color:var(--muted);margin-top:9px;line-height:1.6}
+.build-btn{width:100%;margin-top:19px;padding:14px}
+.example-title{margin:23px 0 11px;color:var(--muted);font-size:.77rem}
+.example{
+  display:block;width:100%;text-align:left;
+  padding:10px 12px;margin-bottom:8px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;background:rgba(255,255,255,.025);
+  color:#a8b8cf;font-size:.77rem;line-height:1.5;
+  transition:.2s;
+}
+.example:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* RIGHT CONTENT */
+.workspace{min-width:0}
+.overview{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-bottom:20px;
+}
+.stat{
+  padding:16px;border:1px solid var(--border);
+  border-radius:11px;background:rgba(13,21,41,.8);
+}
+.stat strong{display:block;font:1.5rem var(--mono);color:var(--cyan)}
+.stat span{font-size:.75rem;color:var(--muted)}
+.stat .stat-icon{font-size:1rem;margin-bottom:8px}
+
+/* AGENTS */
+.agent-panel{margin-bottom:20px}
+.agent-list{
+  padding:18px 20px;display:grid;
+  grid-template-columns:repeat(5,1fr);gap:10px;
+}
+.agent{
+  min-width:0;padding:15px 10px;text-align:center;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;background:rgba(255,255,255,.02);
+  transition:.3s;
+}
+.agent-icon{
+  width:39px;height:39px;margin:0 auto 10px;
+  display:grid;place-items:center;border-radius:10px;
+  background:rgba(0,255,224,.08);color:var(--cyan);font-size:1.15rem;
+}
+.agent h3{font-size:.75rem;margin-bottom:5px}
+.agent p{font-size:.65rem;color:var(--muted)}
+.agent.active{border-color:var(--cyan);box-shadow:var(--glow)}
+.agent.active .agent-icon{background:var(--cyan);color:#03111a}
+.agent.done{border-color:rgba(74,222,128,.4)}
+.agent.done .agent-icon{background:rgba(74,222,128,.12);color:var(--green)}
+.agent.error{border-color:rgba(251,113,133,.5)}
+
+/* PROGRESS */
+.progress-wrap{padding:0 20px 20px}
+.progress-info{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;font-size:.77rem}
+.progress-info span:first-child{color:var(--muted)}
+.progress-info span:last-child{font-family:var(--mono);color:var(--cyan)}
+.progress-track{height:6px;border-radius:20px;background:#1a2942;overflow:hidden}
+.progress-fill{
+  height:100%;width:0%;border-radius:20px;
+  background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet));
+  transition:width .5s;
+}
+
+/* RESULTS */
+.results-panel{min-height:400px}
+.tabs{
+  display:flex;gap:5px;overflow-x:auto;
+  padding:12px 15px;border-bottom:1px solid var(--border);
+}
+.tab{
+  white-space:nowrap;padding:9px 13px;
+  border:1px solid transparent;border-radius:7px;
+  background:transparent;color:var(--muted);
+  font-size:.76rem;font-weight:600;
+}
+.tab:hover{color:var(--cyan)}
+.tab.active{background:rgba(0,255,224,.08);border-color:var(--border);color:var(--cyan)}
+.result-content{padding:23px;min-height:310px}
+.empty-state{
+  min-height:290px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  color:var(--muted);padding:25px;
+}
+.empty-icon{font-size:2.8rem;margin-bottom:17px;filter:drop-shadow(0 0 12px rgba(0,255,224,.3))}
+.empty-state h3{color:var(--text);margin-bottom:8px;font-size:1.1rem}
+.empty-state p{font-size:.83rem;max-width:390px;line-height:1.7}
+.output-text{
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  color:#c4d0e2;font-size:.85rem;line-height:1.8;
+}
+.output-code{
+  white-space:pre;overflow:auto;max-height:600px;
+  background:#070c18;border:1px solid var(--border);
+  border-radius:9px;padding:19px;
+  color:#b9e9d4;font: .8rem/1.8 var(--mono);
+}
+.result-actions{
+  display:flex;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;margin-top:20px;
+}
+.result-actions .btn{font-size:.78rem}
+.result-title{font-size:.9rem;color:var(--cyan);margin-bottom:14px}
+.result-note{font-size:.75rem;color:var(--muted);margin-top:10px}
+
+/* TEST RESULT */
+.test-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:18px;
+}
+.test-box{padding:15px;border:1px solid var(--border);border-radius:9px;background:#080f20}
+.test-box strong{font:1.4rem var(--mono);display:block;color:var(--cyan)}
+.test-box span{font-size:.72rem;color:var(--muted)}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);padding:27px 0;
+  text-align:center;color:var(--muted);font: .75rem var(--mono);
+}
+footer span{color:var(--cyan)}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:25px;right:25px;z-index:200;
+  padding:14px 18px;background:#102039;
+  border:1px solid var(--border);border-radius:9px;
+  color:var(--text);font-size:.83rem;
+  opacity:0;transform:translateY(15px);pointer-events:none;
+  transition:.3s;max-width:min(400px,90vw);
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.error{border-color:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:1050px){
+  .dashboard{grid-template-columns:290px minmax(0,1fr)}
+  .agent-list{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .nav-links{
+    display:none;position:absolute;top:75px;left:0;right:0;
+    background:#080e1e;padding:22px;flex-direction:column;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links.open{display:flex}
+  .menu-btn{display:block}
+  .status-pill{display:none}
+  .hero{padding-top:45px}
+  .dashboard{grid-template-columns:1fr}
+  .overview{grid-template-columns:repeat(2,1fr)}
+  .agent-list{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .agent-list{grid-template-columns:1fr 1fr}
+  .result-content{padding:15px}
+  .hero h1{letter-spacing:-1px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+
+<body>
+<canvas id="neural"></canvas>
+<div class="grid-bg"></div>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a class="logo" href="/">DevTeam<span>AI</span></a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Dashboard</a></li>
+      <li><a href="#agents">AI Agents</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="status-pill">
+        <span class="dot" id="healthDot"></span>
+        <span id="healthText">Checking system</span>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<main class="container" id="home">
+
+  <section class="hero">
+    <div class="eyebrow">✦ MULTI-AGENT DEVELOPMENT SYSTEM</div>
+    <h1>Your AI-Powered <span class="gradient">Software Development Team.</span></h1>
+    <p>
+      Transform your software ideas into working Python projects.
+      Five specialized AI agents collaborate to analyze requirements,
+      write code, create tests, review quality and generate documentation.
+    </p>
+    <div class="hero-meta">
+      <span class="tech-tag">Python</span>
+      <span class="tech-tag">CrewAI</span>
+      <span class="tech-tag">Groq LLM</span>
+      <span class="tech-tag">FastAPI</span>
+      <span class="tech-tag">Pytest</span>
+    </div>
+  </section>
+
+  <section class="dashboard">
+
+    <!-- REQUIREMENT INPUT -->
+    <aside class="panel">
+      <div class="panel-head">
+        <h2>⌘ Project Requirements</h2>
+        <small>INPUT_01</small>
+      </div>
+
+      <div class="panel-body">
+        <label class="label" for="requirement">DESCRIBE YOUR IDEA</label>
+        <textarea id="requirement" maxlength="6000"
+          placeholder="Example: Build a student management system using Python. It should allow users to add students, search records, update information and calculate grades. Include input validation and error handling."></textarea>
+
+        <div class="input-hint">
+          Describe what you want to build. Be clear about features, inputs and expected results.
+        </div>
+
+        <button class="btn btn-primary build-btn" id="buildBtn" onclick="startBuild()">
+          <span>✦</span> Build My Project
+        </button>
+
+        <div class="example-title">TRY AN EXAMPLE</div>
+
+        <button class="example" onclick="useExample(0)">
+          Student Management System — Manage student records and grades.
+        </button>
+        <button class="example" onclick="useExample(1)">
+          Expense Tracker — Record expenses and calculate monthly totals.
+        </button>
+        <button class="example" onclick="useExample(2)">
+          Library Management System — Manage books and borrowing records.
+        </button>
+        <button class="example" onclick="useExample(3)">
+          Task Manager — Create, update and track daily tasks.
+        </button>
+      </div>
+    </aside>
+
+    <!-- WORKSPACE -->
+    <div class="workspace">
+
+      <div class="overview">
+        <div class="stat">
+          <div class="stat-icon">🤖</div>
+          <strong>05</strong>
+          <span>Specialized Agents</span>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">⚙</div>
+          <strong>05</strong>
+          <span>Workflow Stages</span>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">🐍</div>
+          <strong>PY</strong>
+          <span>Python Output</span>
+        </div>
+        <div class="stat">
+          <div class="stat-icon">✓</div>
+          <strong>QA</strong>
+          <span>Test Automation</span>
+        </div>
+      </div>
+
+      <!-- AGENT WORKFLOW -->
+      <div class="panel agent-panel" id="agents">
+        <div class="panel-head">
+          <h2>◈ AI Agent Workflow</h2>
+          <small id="workflowStatus">READY</small>
+        </div>
+
+        <div class="agent-list">
+          <div class="agent" id="agent0">
+            <div class="agent-icon">⌕</div>
+            <h3>Analyst</h3>
+            <p>Requirements</p>
+          </div>
+          <div class="agent" id="agent1">
+            <div class="agent-icon">⌘</div>
+            <h3>Developer</h3>
+            <p>Python Code</p>
+          </div>
+          <div class="agent" id="agent2">
+            <div class="agent-icon">✓</div>
+            <h3>Tester</h3>
+            <p>QA Testing</p>
+          </div>
+          <div class="agent" id="agent3">
+            <div class="agent-icon">⌑</div>
+            <h3>Reviewer</h3>
+            <p>Code Review</p>
+          </div>
+          <div class="agent" id="agent4">
+            <div class="agent-icon">▤</div>
+            <h3>Report Writer</h3>
+            <p>Documentation</p>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-info">
+            <span id="progressText">Waiting for project requirements...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="panel results-panel" id="results">
+        <div class="panel-head">
+          <h2>▣ Development Workspace</h2>
+          <small id="resultStatus">NO OUTPUT YET</small>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="plan">Implementation Plan</button>
+          <button class="tab" data-tab="code">Python Code</button>
+          <button class="tab" data-tab="tests">Test Cases</button>
+          <button class="tab" data-tab="review">Code Review</button>
+          <button class="tab" data-tab="report">Final Report</button>
+        </div>
+
+        <div class="result-content" id="resultContent">
+          <div class="empty-state">
+            <div class="empty-icon">⌘</div>
+            <h3>Your development workspace is ready.</h3>
+            <p>Enter your project requirements and start the AI workflow. Your agents will collaborate to create your project artifacts.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p><span>DevTeam AI</span> · Intelligent Development Workflow · Built with Python, CrewAI &amp; FastAPI</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const examples = [
+  "Build a Student Management System using Python. Add features to add, update, delete and search students. Store student names, IDs, subjects and grades. Include input validation and error handling.",
+  "Build an Expense Tracker using Python. Users should be able to add expenses with categories and dates, view all expenses, calculate total spending and generate monthly summaries.",
+  "Build a Library Management System using Python. It should allow adding books, searching books, borrowing and returning books, and tracking book availability.",
+  "Build a Task Manager using Python. Users should be able to create tasks, set priorities, update task status, delete tasks and view pending and completed tasks."
+];
+
+const output = {
+  plan: "",
+  code: "",
+  tests: "",
+  review: "",
+  report: "",
+  test_results: null
+};
+
+let activeTab = "plan";
+let isBuilding = false;
+let projectId = null;
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function showToast(message, error = false) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.className = "toast show" + (error ? " error" : "");
+  setTimeout(() => toast.className = "toast", 3500);
+}
+
+function useExample(index) {
+  $("requirement").value = examples[index];
+  $("requirement").focus();
+}
+
+function setProgress(percent, text) {
+  $("progressFill").style.width = percent + "%";
+  $("progressPercent").textContent = percent + "%";
+  $("progressText").textContent = text;
+}
+
+function setAgent(index, status) {
+  const agent = $("agent" + index);
+  agent.className = "agent " + status;
+
+  const icon = agent.querySelector(".agent-icon");
+  if (status === "done") icon.textContent = "✓";
+  else if (status === "active") icon.textContent = "●";
+  else if (status === "error") icon.textContent = "!";
+}
+
+function resetWorkflow() {
+  for (let i = 0; i < 5; i++) {
+    $("agent" + i).className = "agent";
+    const icons = ["⌕", "⌘", "✓", "⌑", "▤"];
+    $("agent" + i).querySelector(".agent-icon").textContent = icons[i];
+  }
+}
+
+function renderOutput(tab) {
+  activeTab = tab;
+  document.querySelectorAll(".tab").forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === tab);
+  });
+
+  const content = $("resultContent");
+  const value = output[tab];
+
+  if (!value) {
+    content.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">◈</div>
+        <h3>${tabLabels[tab]} not generated yet.</h3>
+        <p>Start the development workflow to generate this output.</p>
+      </div>`;
+    return;
+  }
+
+  if (tab === "code" || tab === "tests") {
+    const escaped = escapeHtml(value);
+    content.innerHTML = `
+      <div class="result-title">${tab === "code" ? "solution.py" : "test_solution.py"}</div>
+      <pre class="output-code">${escaped}</pre>
+      <div class="result-actions">
+        <button class="btn btn-outline" onclick="copyOutput('${tab}')">Copy Code</button>
+      </div>`;
+    return;
+  }
+
+  if (tab === "tests") {
+    // Test results are displayed in the test tab below when available.
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="result-title">${tabLabels[tab]}</div>
+    <div class="output-text">${escapeHtml(value)}</div>
+    <div class="result-actions">
+      <button class="btn btn-outline" onclick="copyOutput('${tab}')">Copy Content</button>
+    </div>`;
+}
+
+const tabLabels = {
+  plan: "Implementation Plan",
+  code: "Python Implementation",
+  tests: "Test Cases",
+  review: "Code Review",
+  report: "Development Report"
+};
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#039;"
+  })[char]);
+}
+
+async function copyOutput(key) {
+  try {
+    await navigator.clipboard.writeText(output[key] || "");
+    showToast("Content copied to clipboard.");
+  } catch {
+    showToast("Could not copy content.", true);
+  }
+}
+
+async function checkHealth() {
+  try {
+    const response = await fetch("/api/health");
+    if (!response.ok) throw new Error("Health check failed");
+    $("healthDot").style.background = "var(--green)";
+    $("healthText").textContent = "SYSTEM ONLINE";
+  } catch {
+    $("healthDot").style.background = "var(--red)";
+    $("healthText").textContent = "SYSTEM OFFLINE";
+  }
+}
+
+async function startBuild() {
+  if (isBuilding) return;
+
+  const requirement = $("requirement").value.trim();
+
+  if (requirement.length < 20) {
+    showToast("Please describe your project in at least 20 characters.", true);
+    $("requirement").focus();
+    return;
+  }
+
+  isBuilding = true;
+  projectId = null;
+  $("buildBtn").disabled = true;
+  $("buildBtn").innerHTML = "◌ Building Project...";
+  $("workflowStatus").textContent = "RUNNING";
+  $("resultStatus").textContent = "GENERATING";
+  $("resultContent").innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">◌</div>
+      <h3>AI agents are working...</h3>
+      <p>Your requirement is being processed. This may take a little while.</p>
+    </div>`;
+
+  Object.keys(output).forEach(key => output[key] = "");
+  output.test_results = null;
+  resetWorkflow();
+
+  const stages = [
+    "Analyzing project requirements...",
+    "Generating Python implementation...",
+    "Creating automated test cases...",
+    "Reviewing code quality...",
+    "Preparing final development report..."
+  ];
+
+  let stageIndex = 0;
+  setProgress(5, "Connecting to AI development team...");
+
+  const stageTimer = setInterval(() => {
+    if (stageIndex < 5) {
+      for (let i = 0; i < 5; i++) {
+        if (i < stageIndex) setAgent(i, "done");
+        else if (i === stageIndex) setAgent(i, "active");
+      }
+      setProgress(10 + stageIndex * 16, stages[stageIndex]);
+      stageIndex++;
+    }
+  }, 5000);
+
+  try {
+    const response = await fetch("/api/build", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({requirement: requirement})
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.detail || data.message || "Project generation failed.");
+    }
+
+    const result = data.result || data;
+
+    output.plan = result.plan || result.implementation_plan || "";
+    output.code = result.code || result.solution || "";
+    output.tests = result.tests || result.test_code || "";
+    output.review = result.review || result.code_review || "";
+    output.report = result.report || result.development_report || "";
+    output.test_results = result.test_results || null;
+
+    projectId = result.project_id || data.project_id || result.id || data.id || null;
+
+    clearInterval(stageTimer);
+
+    for (let i = 0; i < 5; i++) setAgent(i, "done");
+
+    setProgress(100, "Development workflow completed.");
+    $("workflowStatus").textContent = "COMPLETED";
+    $("resultStatus").textContent = "OUTPUT GENERATED";
+
+    renderOutput("plan");
+    showToast("Your project has been generated successfully.");
+
+    addDownloadButton();
+
+  } catch (error) {
+    clearInterval(stageTimer);
+    $("workflowStatus").textContent = "FAILED";
+    $("resultStatus").textContent = "WORKFLOW ERROR";
+    $("progressText").textContent = "Something went wrong.";
+    $("progressPercent").textContent = "!";
+    $("progressFill").style.width = "100%";
+    $("progressFill").style.background = "var(--red)";
+
+    $("resultContent").innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon" style="color:var(--red)">!</div>
+        <h3>Workflow could not be completed.</h3>
+        <p>${escapeHtml(error.message)}</p>
+        <p class="result-note">Check your server terminal and Groq API connection.</p>
+      </div>`;
+
+    showToast(error.message, true);
+  } finally {
+    isBuilding = false;
+    $("buildBtn").disabled = false;
+    $("buildBtn").innerHTML = "✦ Build My Project";
+  }
+}
+
+function addDownloadButton() {
+  const content = $("resultContent");
+  const actions = content.querySelector(".result-actions");
+  if (!actions || !projectId) return;
+
+  const button = document.createElement("button");
+  button.className = "btn btn-primary";
+  button.textContent = "↓ Download Project ZIP";
+  button.onclick = () => {
+    window.location.href = "/api/download/" + encodeURIComponent(projectId);
+  };
+  actions.appendChild(button);
+}
+
+document.querySelectorAll(".tab").forEach(button => {
+  button.addEventListener("click", () => renderOutput(button.dataset.tab));
+});
+
+$("menuBtn").addEventListener("click", () => {
+  $("navLinks").classList.toggle("open");
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => $("navLinks").classList.remove("open"));
+});
+
+checkHealth();
+setInterval(checkHealth, 30000);
+
+/* NEURAL BACKGROUND */
+(function(){
+  const canvas = $("neural");
+  const ctx = canvas.getContext("2d");
+  if (!ctx || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  let width, height, nodes = [];
+
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const count = Math.min(65, Math.floor(width * height / 20000));
+    nodes = Array.from({length:count}, () => ({
+      x:Math.random()*width,
+      y:Math.random()*height,
+      vx:(Math.random()-.5)*.35,
+      vy:(Math.random()-.5)*.35
+    }));
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,width,height);
+
+    nodes.forEach((a,i)=>{
+      a.x += a.vx;
+      a.y += a.vy;
+
+      if(a.x<0 || a.x>width) a.vx *= -1;
+      if(a.y<0 || a.y>height) a.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(a.x,a.y,1.5,0,Math.PI*2);
+      ctx.fillStyle="rgba(0,255,224,.65)";
+      ctx.fill();
+
+      for(let j=i+1;j<nodes.length;j++){
+        const b=nodes[j];
+        const dx=a.x-b.x;
+        const dy=a.y-b.y;
+        const distance=Math.sqrt(dx*dx+dy*dy);
+
+        if(distance<135){
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y);
+          ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=`rgba(59,130,246,${(1-distance/135)*.3})`;
+          ctx.lineWidth=.6;
+          ctx.stroke();
+        }
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener("resize",resize);
+  draw();
+})();
+</script>
+</body>
+</html>
